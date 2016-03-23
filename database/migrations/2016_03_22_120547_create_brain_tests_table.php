@@ -14,6 +14,7 @@ class CreateBrainTestsTable extends Migration
     {
         Schema::create('brain_tests', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('title');
         });
     }
 

@@ -14,18 +14,63 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/test', function () {
-	$brainTests = Brainer\BrainTest::all();
 
-	$products = array('id', 'name', 'price');
+Route::get('/braintests', function () {
+    $questions = DB::table('brain_tests')->select('id','title')->get();
 
-	return Response::json(array(
+    return Response::json(array(
             'error' => false,
-            'products' => $brainTests,
+            'products' => $questions,
             'status_code' => 200
         ));
     return view('test');
 });
+
+Route::get('/questions/{test_id}', function ($test_id) {
+
+    $questions = DB::table('brain_questions')
+                        ->where('brain_tests_id','=',$test_id)
+                        ->select('id','question')
+                        ->get();
+
+   // return $questions;
+    return Response::json(array(
+            'error' => false,
+            'products' => $questions,
+            'status_code' => 200
+        ));
+
+});
+
+Route::get('/answers/{id}', function ($id) {
+    $answers = DB::table('answers')
+                        ->where('answers.brain_questions_id', '=',$id)
+                        ->select('text','correct')
+                        ->get();
+
+	return Response::json(array(
+            'error' => false,
+            'products' => $answers,
+            'status_code' => 200
+        ));
+   
+});
+
+// Route::get('/highscores/{test_id}', function ($test_id) {
+//     $answers = DB::table('high_scores')
+//                         ->where('brain_tests_id', '=',$test_id)
+//                         ->select('username','score')
+//                         ->get();
+
+//     return Response::json(array(
+//             'error' => false,
+//             'products' => $answers,
+//             'status_code' => 200
+//         ));
+// Route::resource('highscores', 'HighScoresController');
+
+// });
+Route::resource('highscores', 'HighScoreController');
 
 
 /*

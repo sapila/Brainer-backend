@@ -14,6 +14,8 @@ class CreateHighScoresTable extends Migration
     {
         Schema::create('high_scores', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('username');
+            $table->integer('score');
             $table->integer('brain_tests_id')->unsigned();
 
 
